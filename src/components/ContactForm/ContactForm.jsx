@@ -3,7 +3,7 @@ import { Form, Label } from './ContactForm.styled';
 import { useState } from 'react';
 import { useDispatch, useSelector  } from 'react-redux';
 import { addContact } from 'redux/operations';
-import { getContacts } from 'redux/selectors';
+import { getContacts, getIsLoading, getError} from 'redux/selectors';
 
 
 export function ContactForm() {
@@ -13,6 +13,8 @@ export function ContactForm() {
   
    const allContacts = useSelector(getContacts);
    const dispatch = useDispatch();
+   const error = useSelector(getError)
+	 const isLoading = useSelector(getIsLoading)
 
     const handleChange = e => {
     const { name, value } = e.currentTarget;
@@ -70,7 +72,14 @@ export function ContactForm() {
   };
     
 
-        return (
+  return (
+
+    <>
+        {error && <p>{error}</p>}
+
+       {isLoading ? <p>Request in progress...</p> 
+        :
+          
         <Form onSubmit = {handleSubmit}>
             <Label>
                 Name
@@ -96,12 +105,14 @@ export function ContactForm() {
             </Label>
                 
             <button type='submit'>Add contact</button>
+            
          </Form>
-        );
+       }
+    </>
+    
+);
 
     
-}
-  // ContactForm.propTypes = {
-  //       onSubmit: PropTypes.func.isRequired,
-  // };
+};
+
 export default  ContactForm;
